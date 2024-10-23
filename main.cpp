@@ -1,6 +1,14 @@
 #include <iostream>
 using namespace std;
 
+void printYears(int data[][2], int size, int births) {
+    for (int i = 0; i < size; i++) {
+        if (data[i][1] == births) {
+            cout << "Nam: " << data[i][0] << ", so luong sinh la: " << births << endl;
+        }
+    }
+}
+
 int findMaxYear(int data[][2], int size) {
     int maxBirths = data[0][1];
     for (int i = 1; i < size; i++) {
@@ -21,10 +29,23 @@ int findMinYear(int data[][2], int size) {
     return minBirths;
 }
 
-void printYears(int data[][2], int size, int births) {
-    for (int i = 0; i < size; i++) {
-        if (data[i][1] == births) {
-            cout << "Nam: " << data[i][0] << ", so luong sinh la: " << births << endl;
+void yearsWithSameBirths(int data[][2], int n) {
+    for (int i = 0; i < n; i++) {
+        bool found = 0;
+        int currentPeople = data[i][1];
+
+        for (int j = i + 1; j < n; j++) {
+            if (data[j][1] == currentPeople) {
+                if (!found) {
+                    cout <<  data[i][0];
+                    found = true;
+                }
+                cout << ", " << data[j][0];
+            }
+        }
+
+        if (found) {
+            cout << " voi " << data[i][1] << " nguoi." << endl;
         }
     }
 }
@@ -52,6 +73,9 @@ int main() {
 
     cout << "Cac nam co so luong sinh nho nhat: " << endl;
     printYears(populationData, size, minBirths);
+
+    cout << "Cac nam co cung so luong nguoi sinh ra: " << endl;
+    yearsWithSameBirths(populationData, size);
 
     return 0;
 }

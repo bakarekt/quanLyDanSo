@@ -1,57 +1,66 @@
 #include <iostream>
 using namespace std;
 
-void printYears(int data[][2], int size, int births) {
+void printYears(int years[][2], int size, int births) {
     for (int i = 0; i < size; i++) {
-        if (data[i][1] == births) {
-            cout << "Nam: " << data[i][0] << ", so luong sinh la: " << births << endl;
+        if (years[i][1] == births) {
+            cout << "Nam: " << years[i][0] << ", so luong sinh la: " << births << endl;
         }
     }
 }
 
-int findMaxYear(int data[][2], int size) {
-    int maxBirths = data[0][1];
-    for (int i = 1; i < size; i++) {
-        if (data[i][1] > maxBirths) {
-            maxBirths = data[i][1];
-        }
+void swap(int a[2], int b[2]){
+    for (int k = 0; k < 2; k++) {
+        int temp = a[k];
+        a[k] = b[k];
+        b[k] = temp;
     }
-    return maxBirths;
 }
 
-int findMinYear(int data[][2], int size) {
-    int minBirths = data[0][1];
-    for (int i = 1; i < size; i++) {
-        if (data[i][1] < minBirths) {
-            minBirths = data[i][1];
+int partition(int years[][2], int low, int high){
+    int pivot = years[high][1];
+    int i = low - 1;
+    for (int j = low; j < high; j++){
+        if (years[j][1] < pivot){
+            i++;
+            swap(years[i], years[j]);
         }
     }
-    return minBirths;
+    swap(years[i + 1], years[high]);
+    return i + 1;
 }
 
-void yearsWithSameBirths(int data[][2], int n) {
+void quickSort(int years[][2], int low, int high){
+    if (low < high){
+        int pi = partition(years, low, high);
+        quickSort(years, low, pi - 1);
+        quickSort(years, pi + 1, high);
+    }
+}
+
+void yearsWithSameBirths(int years[][2], int n) {
     for (int i = 0; i < n; i++) {
         bool found = 0;
-        int currentPeople = data[i][1];
+        int currentPeople = years[i][1];
 
         for (int j = i + 1; j < n; j++) {
-            if (data[j][1] == currentPeople) {
+            if (years[j][1] == currentPeople) {
                 if (!found) {
-                    cout <<  data[i][0];
+                    cout <<  years[i][0];
                     found = true;
                 }
-                cout << ", " << data[j][0];
+                cout << ", " << years[j][0];
             }
         }
 
         if (found) {
-            cout << " voi " << data[i][1] << " nguoi." << endl;
+            cout << " voi " << years[i][1] << " nguoi." << endl;
         }
     }
 }
 
 int main() {
-    int populationData[][2] = {
+    int years[][2] = {
         {1920, 19}, {1921, 77}, {1922, 40}, {1923, 90}, {1924, 2}, {1925, 25},
         {1926, 54}, {1927, 17}, {1928, 79}, {1929, 6}, {1930, 44}, {1931, 24},
         {1932, 14}, {1933, 4}, {1934, 95}, {1935, 47}, {1936, 66}, {1937, 48},
@@ -63,19 +72,28 @@ int main() {
         {1968, 65}, {1969, 87}, {1970, 11}
     };
     
-    int size = sizeof(populationData) / sizeof(populationData[0]);
+    int size = sizeof(years) / sizeof(years[0]);
 
-    int maxBirths = findMaxYear(populationData, size);
-    int minBirths = findMinYear(populationData, size);
+    quickSort(years, 0, size - 1);
 
-    cout << "Cac nam co so luong sinh lon nhat: " << endl;
-    printYears(populationData, size, maxBirths);
+    cout << "Nam co nhieu nguoi sinh ra nhat: " << endl;
+    for (int i = 0; i < size; i++) {
+        if(years[i][1] == years[size - 1][1]) {
+            cout << years[i][0] << ", ";
+        }
+    }
+    cout << "voi " << years[size - 1][1] << " nguoi\n";
 
-    cout << "Cac nam co so luong sinh nho nhat: " << endl;
-    printYears(populationData, size, minBirths);
+    cout << "Nam co it nguoi sinh ra nhat: " << endl;
+    for (int i = 0; i < size; i++) {
+        if(years[i][1] == years[0][1]) {
+            cout << years[i][0] << ", ";
+        }
+    }
+    cout << "voi " << years[0][1] << " nguoi\n";
 
     cout << "Cac nam co cung so luong nguoi sinh ra: " << endl;
-    yearsWithSameBirths(populationData, size);
+    yearsWithSameBirths(years, size);
 
     return 0;
 }

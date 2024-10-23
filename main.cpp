@@ -1,14 +1,6 @@
 #include <iostream>
 using namespace std;
 
-void printYears(int years[][2], int size, int births) {
-    for (int i = 0; i < size; i++) {
-        if (years[i][1] == births) {
-            cout << "Nam: " << years[i][0] << ", so luong sinh la: " << births << endl;
-        }
-    }
-}
-
 void swap(int a[2], int b[2]){
     for (int k = 0; k < 2; k++) {
         int temp = a[k];
